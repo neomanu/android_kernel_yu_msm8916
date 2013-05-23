@@ -116,7 +116,9 @@ static int ecryptfs_readdir(struct file *file, void *dirent, filldir_t filldir)
 	int rc;
 	struct file *lower_file;
 	struct inode *inode;
-	struct ecryptfs_getdents_callback buf;
+	struct ecryptfs_getdents_callback buf = {
+		.ctx.actor = ecryptfs_filldir
+	};
 
 	lower_file = ecryptfs_file_to_lower(file);
 	lower_file->f_pos = file->f_pos;
@@ -127,7 +129,6 @@ static int ecryptfs_readdir(struct file *file, void *dirent, filldir_t filldir)
 	buf.filldir = filldir;
 	buf.filldir_called = 0;
 	buf.entries_written = 0;
-	buf.ctx.actor = ecryptfs_filldir;
 	rc = iterate_dir(lower_file, &buf.ctx);
 	file->f_pos = lower_file->f_pos;
 	if (rc < 0)
