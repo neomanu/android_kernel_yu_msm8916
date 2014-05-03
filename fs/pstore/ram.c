@@ -425,6 +425,12 @@ of_ramoops_platform_data(struct device *dev)
 #define of_ramoops_platform_data(dev) NULL
 #endif
 
+void notrace ramoops_console_write_buf(const char *buf, size_t size)
+{
+	struct ramoops_context *cxt = &oops_cxt;
+	persistent_ram_write(cxt->cprz, buf, size);
+}
+
 static int ramoops_probe(struct platform_device *pdev)
 {
 	struct device *dev = &pdev->dev;
