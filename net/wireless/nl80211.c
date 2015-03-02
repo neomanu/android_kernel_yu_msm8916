@@ -6792,7 +6792,7 @@ void __cfg80211_send_event_skb(struct sk_buff *skb, gfp_t gfp)
 	struct nlattr *data = ((void **)skb->cb)[2];
 
 	/* clear CB data for netlink core to own from now on */
-	memset(skb->cb, 0, sizeof(skb->cb))
+	memset(skb->cb, 0, sizeof(skb->cb));
 
 	nla_nest_end(skb, data);
 	genlmsg_end(skb, hdr);
